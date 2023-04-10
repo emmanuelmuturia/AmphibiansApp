@@ -13,11 +13,11 @@ interface AppContainer {
 
 
 class DefaultAppContainer : AppContainer {
-    private val BASE_URL = "https://android-kotlin-fun-mars-server.appspot.com/"
+    private val baseURL = "https://android-kotlin-fun-mars-server.appspot.com/"
 
     @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(baseURL)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
 

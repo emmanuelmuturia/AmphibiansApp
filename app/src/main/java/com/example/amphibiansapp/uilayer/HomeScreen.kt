@@ -25,7 +25,7 @@ import com.example.amphibiansapp.ui.theme.AmphibiansAppTheme
 
 
 @Composable
-fun AmphibiansApp(amphibianViewModel: AmphibianViewModel, modifier: Modifier = Modifier) {
+fun AmphibiansApp(amphibianViewModel: AmphibianViewModel = viewModel(), modifier: Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = { TopAppBar(title = { Text(stringResource(R.string.app_name)) }) }
@@ -36,7 +36,6 @@ fun AmphibiansApp(amphibianViewModel: AmphibianViewModel, modifier: Modifier = M
                 .padding(it),
             color = MaterialTheme.colors.background
         ) {
-            val amphibianViewModel: AmphibianViewModel = viewModel()
             HomeScreen(amphibianState = amphibianViewModel.amphibianState)
         }
     }
@@ -121,13 +120,13 @@ fun ErrorScreen() {
 @Preview(showBackground = true)
 @Composable
 fun AmphibianCardPreview() {
-    AmphibiansAppTheme() {
+    AmphibiansAppTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            AmphibianCard(myAmphibian = AmphibianPhoto(name = "FrogName", type = "FRog", "DEscription", imgSrc = "${R.drawable.img}"))
+            AmphibianCard(myAmphibian = AmphibianPhoto(name = "FrogName", type = "Frog", "Description", imgSrc = "${R.drawable.img}"))
         }
     }
 }
