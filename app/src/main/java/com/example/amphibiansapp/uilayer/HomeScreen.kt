@@ -14,12 +14,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.amphibiansapp.R
 import com.example.amphibiansapp.datalayer.AmphibianPhoto
+import com.example.amphibiansapp.ui.theme.AmphibiansAppTheme
 
 
 @Composable
@@ -62,20 +66,30 @@ fun AmphibianCard(myAmphibian: AmphibianPhoto) {
             .aspectRatio(1f),
         elevation = 8.dp,
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(context = LocalContext.current).data(myAmphibian.imgSrc).crossfade(true).build(),
-            error = painterResource(id = R.drawable.ic_broken_image),
-            placeholder = painterResource(id = R.drawable.loading_img),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = "Amphibian Image"
-        )
+        Column (
+            modifier = Modifier.padding(3.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+                ) {
+            Text(modifier = Modifier.padding(start = 7.dp, end = 7.dp), text = "${myAmphibian.name} (${myAmphibian.type})", fontWeight = FontWeight.Bold)
+            Text(modifier = Modifier.padding(3.dp), text = myAmphibian.description, textAlign = TextAlign.Justify)
+            AsyncImage(
+                modifier = Modifier.fillMaxWidth(),
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(myAmphibian.imgSrc).crossfade(true).build(),
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.loading_img),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Amphibian Image"
+            )
+        }
     }
 }
 
 @Composable
 fun HomeScreen(amphibianState: AmphibianState) {
     when(amphibianState) {
-        is AmphibianState.Success -> AmphibianScreen((amphibianState as AmphibianState.Success).photos)
+        is AmphibianState.Success -> AmphibianScreen(amphibianState.photos)
         is AmphibianState.Loading -> LoadingScreen()
         is AmphibianState.Error -> ErrorScreen()
     }
@@ -102,5 +116,20 @@ fun ErrorScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         Image(painter = painterResource(id = R.drawable.error), contentDescription = "Loading", modifier = Modifier.size(200.dp))
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun AmphibianCardPreview() {
+    AmphibiansAppTheme() {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            AmphibianCard(myAmphibian = AmphibianPhoto(name = "FrogName", type = "FRog", "DEscription", imgSrc = "${R.drawable.img}"))
+        }
     }
 }
